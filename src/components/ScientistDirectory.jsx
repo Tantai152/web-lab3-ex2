@@ -16,6 +16,17 @@ export function ScientistDirectory({ initialData = SMART_PEOPLE }) {
     setMinIq(Number.isNaN(v) ? 0 : v);
   };
 
+  const handleDelete = (id) => {
+    setPeople((prev) => prev.filter((p) => p.id !== id));
+  };
+
+  const handleReset = () => {
+    setPeople(initialData);
+    setQuery('');
+    setMinIq(160);
+    setSortBy('iq-desc');
+  };
+
   const visible = people
     .filter(
       (p) =>
@@ -56,14 +67,25 @@ export function ScientistDirectory({ initialData = SMART_PEOPLE }) {
         </select>
       </form>
 
+      <button type="button" onClick={handleReset}>
+        Reset All
+      </button>
+
       <output role="status" aria-live="polite">
-        Found {visible.length} pioneers
+        Showing {visible.length} of {people.length} pioneers.
       </output>
 
       <ul>
         {visible.map((p) => (
           <li key={p.id}>
-            {p.name} — Age: {p.age} — IQ: {p.iq}
+            {p.name} — Age: {p.age} — IQ: {p.iq}{' '}
+            <button
+              type="button"
+              onClick={() => handleDelete(p.id)}
+              aria-label={`Delete ${p.name}`}
+            >
+              Delete
+            </button>
           </li>
         ))}
       </ul>
